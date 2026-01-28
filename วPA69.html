@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PA 2569: NTU Music Smart System | Waratpop Tumnahad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #020617; /* Slate-950 */
+            color: #f8fafc;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Kanit', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc); /* Sky to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-gold {
+            background: linear-gradient(to right, #facc15, #fbbf24, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-screen {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 0;
+        }
+        .card-glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .nav-dot.active {
+            background-color: #38bdf8;
+            transform: scale(1.5);
+            box-shadow: 0 0 10px #38bdf8;
+        }
+
+        /* Abstract Background Animation */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: move 20s infinite alternate;
+            z-index: 0;
+        }
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            border-radius: 1.5rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-body {
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        .detail-item {
+            border-left: 2px solid #334155;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        .detail-item:hover {
+            border-left-color: #38bdf8;
+        }
+        
+        /* Custom Scrollbar for Modal */
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-body::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05); 
+        }
+        .modal-body::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2); 
+            border-radius: 10px;
+        }
+        
+        /* Workload List Item */
+        .workload-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .workload-list-item:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+        .hour-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Download Button Animation */
+        .btn-download {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
+        }
+        .btn-download::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn-download:hover::after {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="selection:bg-sky-500 selection:text-white">
+
+    <!-- Navigation -->
+    <div class="nav-dots hidden lg:flex">
+        <div class="nav-dot active" onclick="scrollToSection(0)" title="หน้าแรก"></div>
+        <div class="nav-dot" onclick="scrollToSection(1)" title="ข้อมูลผู้จัดทำ"></div>
+        <div class="nav-dot" onclick="scrollToSection(2)" title="ภาระงาน"></div>
+        <div class="nav-dot" onclick="scrollToSection(3)" title="ข้อตกลง 3 ด้าน"></div>
+        <div class="nav-dot" onclick="scrollToSection(4)" title="นวัตกรรม"></div>
+        <div class="nav-dot" onclick="scrollToSection(5)" title="กระบวนการ PDCA"></div>
+        <div class="nav-dot" onclick="scrollToSection(6)" title="ผลลัพธ์"></div>
+    </div>
+
+    <!-- Section 0: HERO -->
+    <section class="section-screen relative" id="section-0">
+        <div class="blob bg-indigo-600 w-96 h-96 top-0 left-0"></div>
+        <div class="blob bg-purple-600 w-80 h-80 bottom-0 right-0 animation-delay-2000"></div>
+        
+        <div class="container mx-auto px-4 text-center z-10">
+            <div class="gs-hero opacity-0 translate-y-10">
+                <div class="inline-block px-4 py-1 rounded-full border border-sky-500/50 bg-sky-500/10 text-sky-400 font-bold tracking-widest text-sm mb-6">
+                    FY 2569 PERFORMANCE AGREEMENT
+                </div>
+                <h1 class="text-6xl md:text-8xl font-black mb-4 leading-tight text-white">
+                    NTU MUSIC<br>
+                    <span class="gradient-text">SMART SYSTEM</span>
+                </h1>
+                <p class="text-xl text-slate-400 font-light max-w-2xl mx-auto mb-10">
+                    นวัตกรรมการบริหารจัดการและส่งเสริมการเรียนรู้ดนตรี<br>
+                    เพื่อยกระดับความรับผิดชอบและทักษะดนตรีของผู้เรียน
+                </p>
+                <div class="flex justify-center gap-6 mb-10">
+                    <div class="text-center">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">POSITION</p>
+                        <p class="text-lg font-bold text-white">ครูชำนาญการพิเศษ</p>
+                    </div>
+                    <div class="w-px h-10 bg-slate-700"></div>
+                    <div class="text-center">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">TARGET</p>
+                        <p class="text-lg font-bold text-yellow-400">ครูเชี่ยวชาญ (คศ.4)</p>
+                    </div>
+                </div>
+
+                <!-- DOWNLOAD BUTTON -->
+                <a href="https://drive.google.com/file/d/12dGMEhtRdt33U8Rrwwdr-srf8rpG14LZ/view?usp=sharing" target="_blank" class="btn-download inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg shadow-blue-500/30">
+                    <i class="ph ph-file-doc text-2xl"></i>
+                    <span>ดาวน์โหลดไฟล์ วPA ฉบับเต็ม</span>
+                    <i class="ph ph-download-simple ml-1"></i>
+                </a>
+                <p class="text-slate-500 text-xs mt-3">คลิกเพื่อดูรายละเอียดเอกสารทั้งหมด (.docx)</p>
+
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-500 cursor-pointer" onclick="scrollToSection(1)">
+            <i class="ph ph-caret-down text-3xl"></i>
+        </div>
+    </section>
+
+    <!-- Section 1: PROFILE -->
+    <section class="section-screen bg-slate-900/50" id="section-1">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                <!-- Image/Card -->
+                <div class="gs-profile-left opacity-0 -translate-x-10">
+                    <div class="card-glass p-8 relative overflow-hidden group hover:border-sky-500/50 transition-colors duration-500">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <i class="ph ph-identification-card text-9xl text-white"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="w-24 h-24 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg shadow-sky-500/20">
+                                👨‍🏫
+                            </div>
+                            <h2 class="text-4xl font-bold text-white font-heading mb-2">นายวรัทภพ ทุมนาหาด</h2>
+                            <p class="text-sky-400 text-lg mb-6">โรงเรียนโนนไทยคุรุอุปถัมภ์</p>
+                            
+                            <div class="space-y-3 text-sm text-slate-300">
+                                <div class="flex justify-between border-b border-slate-700 pb-2">
+                                    <span>สังกัด</span>
+                                    <span class="font-bold text-white">อบจ.นครราชสีมา</span>
+                                </div>
+                                <div class="flex justify-between border-b border-slate-700 pb-2">
+                                    <span>เงินเดือน (1 ต.ค. 68)</span>
+                                    <span class="font-bold text-green-400">37,980 บาท</span>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <span>ระดับที่คาดหวัง</span>
+                                    <span class="px-3 py-1 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 font-bold">คิดค้นและปรับเปลี่ยน</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Info -->
+                <div class="gs-profile-right opacity-0 translate-x-10 text-right md:text-left">
+                    <h3 class="text-indigo-400 font-bold tracking-widest text-sm mb-2">VISION & MISSION</h3>
+                    <h2 class="text-5xl font-bold text-white font-heading mb-6 leading-tight">
+                        เปลี่ยนห้องเรียน<br>
+                        ด้วย <span class="gradient-text">พลังนวัตกรรม</span>
+                    </h2>
+                    <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                        มุ่งมั่นแก้ปัญหาความล่าช้าในการบริหารจัดการ และสร้างแรงบันดาลใจให้ผู้เรียน 
+                        โดยการนำเทคโนโลยี <b>AppSheet</b> และ <b>Gamification</b> มาใช้จริง 
+                        เพื่อเปลี่ยนจากระบบ "เอกสาร" สู่ "ดิจิทัล" อย่างสมบูรณ์แบบ
+                    </p>
+                    <div class="flex gap-4 justify-end md:justify-start">
+                        <div class="text-center px-4 py-3 rounded-xl bg-slate-800 border border-slate-700">
+                            <i class="ph ph-lightbulb text-2xl text-yellow-400 mb-1"></i>
+                            <p class="text-xs text-slate-400">Invent</p>
+                        </div>
+                        <div class="text-center px-4 py-3 rounded-xl bg-slate-800 border border-slate-700">
+                            <i class="ph ph-arrows-left-right text-2xl text-green-400 mb-1"></i>
+                            <p class="text-xs text-slate-400">Transform</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: WORKLOAD (Interactive) -->
+    <section class="section-screen" id="section-2">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 gs-fade-up opacity-0 translate-y-10">
+                <h2 class="text-4xl font-bold text-white font-heading mb-4">ภาระงานขับเคลื่อนคุณภาพ</h2>
+                <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300">
+                    <i class="ph ph-clock-countdown text-xl text-sky-400"></i>
+                    <span>รวมทั้งสิ้น <strong class="text-white text-xl">35</strong> ชั่วโมง/สัปดาห์</span>
+                </div>
+                <p class="text-slate-500 text-sm mt-4">คลิกที่การ์ดเพื่อดูรายละเอียดรายวิชาและกิจกรรม</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- Card 1 -->
+                <div onclick="openDetailModal('w1')" class="card-glass p-6 text-center group hover:-translate-y-2 hover:bg-slate-800 transition-all duration-300 border-t-4 border-t-sky-500 gs-workload-card opacity-0 translate-y-10 cursor-pointer">
+                    <div class="text-5xl font-black text-sky-500 mb-2 counter" data-target="26">0</div>
+                    <div class="text-xs text-slate-500 font-bold mb-4">ชั่วโมง/สัปดาห์</div>
+                    <h3 class="text-xl font-bold text-white mb-2">1.1 งานสอน</h3>
+                    <p class="text-sm text-slate-400">ดนตรี ม.4, ปฏิบัติสากล, ชุมนุม, ลูกเสือ</p>
+                    <div class="mt-4 text-xs text-sky-400 group-hover:text-white transition-colors flex items-center justify-center gap-1">
+                        <span>ดูรายละเอียด</span> <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div onclick="openDetailModal('w2')" class="card-glass p-6 text-center group hover:-translate-y-2 hover:bg-slate-800 transition-all duration-300 border-t-4 border-t-indigo-500 gs-workload-card opacity-0 translate-y-10 delay-100 cursor-pointer">
+                    <div class="text-5xl font-black text-indigo-500 mb-2 counter" data-target="4">0</div>
+                    <div class="text-xs text-slate-500 font-bold mb-4">ชั่วโมง/สัปดาห์</div>
+                    <h3 class="text-xl font-bold text-white mb-2">1.2 งานสนับสนุน</h3>
+                    <p class="text-sm text-slate-400">PLC, สร้างสื่อ App/Game, เยี่ยมบ้าน</p>
+                    <div class="mt-4 text-xs text-indigo-400 group-hover:text-white transition-colors flex items-center justify-center gap-1">
+                        <span>ดูรายละเอียด</span> <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div onclick="openDetailModal('w3')" class="card-glass p-6 text-center group hover:-translate-y-2 hover:bg-slate-800 transition-all duration-300 border-t-4 border-t-purple-500 gs-workload-card opacity-0 translate-y-10 delay-200 cursor-pointer">
+                    <div class="text-5xl font-black text-purple-500 mb-2 counter" data-target="3">0</div>
+                    <div class="text-xs text-slate-500 font-bold mb-4">ชั่วโมง/สัปดาห์</div>
+                    <h3 class="text-xl font-bold text-white mb-2">1.3 พัฒนาสถานศึกษา</h3>
+                    <p class="text-sm text-slate-400">งานโสตทัศนูปกรณ์, ประชาสัมพันธ์</p>
+                    <div class="mt-4 text-xs text-purple-400 group-hover:text-white transition-colors flex items-center justify-center gap-1">
+                        <span>ดูรายละเอียด</span> <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div onclick="openDetailModal('w4')" class="card-glass p-6 text-center group hover:-translate-y-2 hover:bg-slate-800 transition-all duration-300 border-t-4 border-t-pink-500 gs-workload-card opacity-0 translate-y-10 delay-300 cursor-pointer">
+                    <div class="text-5xl font-black text-pink-500 mb-2 counter" data-target="2">0</div>
+                    <div class="text-xs text-slate-500 font-bold mb-4">ชั่วโมง/สัปดาห์</div>
+                    <h3 class="text-xl font-bold text-white mb-2">1.4 งานนโยบาย</h3>
+                    <p class="text-sm text-slate-400">ความเป็นเลิศ (อบจ.), สถานศึกษาปลอดภัย</p>
+                    <div class="mt-4 text-xs text-pink-400 group-hover:text-white transition-colors flex items-center justify-center gap-1">
+                        <span>ดูรายละเอียด</span> <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: STANDARDS (Part 1 - 3 Aspects - Expandable) -->
+    <section class="section-screen bg-slate-900/30" id="section-3">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 gs-std-head opacity-0 translate-y-10">
+                <span class="text-indigo-400 font-bold tracking-widest text-sm uppercase">PART 1: AGREEMENT</span>
+                <h2 class="text-4xl font-bold text-white font-heading mt-2">ข้อตกลงในการพัฒนางาน (3 ด้าน)</h2>
+                <p class="text-slate-400 text-sm mt-2">คลิกที่การ์ดเพื่อดูรายละเอียดงาน ผลลัพธ์ และตัวชี้วัด</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                
+                <!-- Aspect 1 (Clickable) -->
+                <div onclick="openDetailModal(1)" class="card-glass p-8 group hover:bg-slate-800/80 hover:-translate-y-2 transition-all duration-300 border-t-4 border-sky-500 relative gs-std-card opacity-0 translate-y-20 cursor-pointer">
+                    <div class="absolute top-4 right-4 text-6xl text-sky-500/10 font-black group-hover:text-sky-500/20 transition-colors">01</div>
+                    <div class="w-16 h-16 rounded-2xl bg-sky-500/20 flex items-center justify-center text-sky-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="ph ph-chalkboard-teacher text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">ด้านการจัดการเรียนรู้</h3>
+                    <p class="text-sky-400 text-sm mb-4 font-bold uppercase tracking-wider">Learning Management</p>
+                    <div class="flex justify-between items-center mt-6 text-slate-400 group-hover:text-sky-400 transition-colors">
+                        <span class="text-xs">คลิกเพื่ออ่าน 8 หัวข้อ</span>
+                        <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Aspect 2 (Clickable) -->
+                <div onclick="openDetailModal(2)" class="card-glass p-8 group hover:bg-slate-800/80 hover:-translate-y-2 transition-all duration-300 border-t-4 border-purple-500 relative gs-std-card opacity-0 translate-y-20 delay-100 cursor-pointer">
+                    <div class="absolute top-4 right-4 text-6xl text-purple-500/10 font-black group-hover:text-purple-500/20 transition-colors">02</div>
+                    <div class="w-16 h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="ph ph-hands-clapping text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">ด้านส่งเสริมสนับสนุน</h3>
+                    <p class="text-purple-400 text-sm mb-4 font-bold uppercase tracking-wider">Promotion & Support</p>
+                    <div class="flex justify-between items-center mt-6 text-slate-400 group-hover:text-purple-400 transition-colors">
+                        <span class="text-xs">คลิกเพื่ออ่าน 4 หัวข้อ</span>
+                        <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Aspect 3 (Clickable) -->
+                <div onclick="openDetailModal(3)" class="card-glass p-8 group hover:bg-slate-800/80 hover:-translate-y-2 transition-all duration-300 border-t-4 border-pink-500 relative gs-std-card opacity-0 translate-y-20 delay-200 cursor-pointer">
+                    <div class="absolute top-4 right-4 text-6xl text-pink-500/10 font-black group-hover:text-pink-500/20 transition-colors">03</div>
+                    <div class="w-16 h-16 rounded-2xl bg-pink-500/20 flex items-center justify-center text-pink-400 mb-6 group-hover:scale-110 transition-transform">
+                        <i class="ph ph-trend-up text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">ด้านพัฒนาตนเอง</h3>
+                    <p class="text-pink-400 text-sm mb-4 font-bold uppercase tracking-wider">Self-Development</p>
+                    <div class="flex justify-between items-center mt-6 text-slate-400 group-hover:text-pink-400 transition-colors">
+                        <span class="text-xs">คลิกเพื่ออ่าน 3 หัวข้อ</span>
+                        <i class="ph ph-arrow-right"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: INNOVATION (Interactive) -->
+    <section class="section-screen" id="section-4">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 gs-innov-text opacity-0 -translate-x-10">
+                    <span class="text-indigo-400 font-bold tracking-widest text-sm block mb-2">PART 2: CHALLENGE ISSUE</span>
+                    <h2 class="text-5xl font-bold text-white font-heading mb-6">
+                        NTU MUSIC<br>SMART SYSTEM
+                    </h2>
+                    <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                        การคิดค้นและปรับเปลี่ยนรูปแบบการบริหารจัดการด้วยนวัตกรรม 2 ส่วนประกอบหลัก เพื่อแก้ปัญหาอย่างเป็นระบบ
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <!-- Innovation 1 (Clickable) -->
+                        <div onclick="openDetailModal('inno1')" class="flex gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-sky-500/50 transition-colors cursor-pointer group">
+                            <div class="w-12 h-12 rounded-lg bg-sky-500/20 flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="ph ph-device-mobile-camera text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">NTU Service App</h4>
+                                <p class="text-sm text-slate-400 mt-1">แอปพลิเคชันยืม-คืน จองห้อง และแจ้งซ่อม เชื่อมต่อฐานข้อมูล Real-time</p>
+                                <div class="mt-2 text-xs text-sky-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span>คลิกดูฟีเจอร์เด่น</span> <i class="ph ph-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Innovation 2 (Clickable) -->
+                        <div onclick="openDetailModal('inno2')" class="flex gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-purple-500/50 transition-colors cursor-pointer group">
+                            <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="ph ph-game-controller text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">Music Gamification</h4>
+                                <p class="text-sm text-slate-400 mt-1">เกมฝึกทักษะดนตรี (Music Quest) เปลี่ยนวินัยเป็นคะแนน XP</p>
+                                <div class="mt-2 text-xs text-purple-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span>คลิกดูฟีเจอร์เด่น</span> <i class="ph ph-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 relative h-[600px] flex items-center justify-center gs-innov-img opacity-0 translate-x-10">
+                    <!-- Phone Mockup -->
+                    <div class="relative z-10 w-[300px] h-[600px] bg-slate-950 border-8 border-slate-800 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+                        <div class="bg-indigo-600 p-6 pt-12 pb-4">
+                            <h3 class="text-white font-bold text-xl">NTU Service</h3>
+                            <p class="text-indigo-200 text-xs">ยินดีต้อนรับ, ครูวรัทภพ</p>
+                        </div>
+                        <div class="flex-1 bg-slate-900 p-4 space-y-4">
+                            <div class="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-2xl p-4 text-white shadow-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-xs opacity-80">คะแนนความรับผิดชอบ</p>
+                                        <h4 class="text-3xl font-bold">1,250 XP</h4>
+                                    </div>
+                                    <i class="ph ph-trophy text-2xl text-yellow-300"></i>
+                                </div>
+                                <div class="mt-3 w-full bg-black/20 h-1.5 rounded-full overflow-hidden">
+                                    <div class="h-full bg-white w-[80%]"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="aspect-square bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-700 cursor-pointer">
+                                    <i class="ph ph-qr-code text-3xl text-sky-400"></i>
+                                    <span class="text-slate-300 text-sm">สแกนยืม</span>
+                                </div>
+                                <div class="aspect-square bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-700 cursor-pointer">
+                                    <i class="ph ph-calendar-check text-3xl text-purple-400"></i>
+                                    <span class="text-slate-300 text-sm">จองห้องซ้อม</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-800 rounded-2xl p-4">
+                                <p class="text-xs text-slate-500 font-bold mb-2">รายการล่าสุด</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
+                                        <i class="ph ph-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm">คืน กีตาร์โปร่ง #05</p>
+                                        <p class="text-slate-500 text-xs">ตรงเวลา (+50 XP)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Circle -->
+                    <div class="absolute w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: PDCA (Interactive) -->
+    <section class="section-screen bg-slate-900/50" id="section-5">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white font-heading mb-16 gs-fade-up">กระบวนการพัฒนา (PDCA)</h2>
+            <p class="text-center text-slate-400 text-sm mb-8 -mt-12">คลิกแต่ละขั้นตอนเพื่อดูรายละเอียดการดำเนินงาน</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- P -->
+                <div onclick="openDetailModal('pdca_p')" class="card-glass p-6 border-t-4 border-sky-500 gs-pdca-card opacity-0 translate-y-10 group hover:bg-slate-800 transition-colors cursor-pointer">
+                    <span class="text-6xl font-black text-sky-500/10 absolute top-2 right-4 group-hover:text-sky-500/20 transition-colors">P</span>
+                    <h3 class="text-2xl font-bold text-sky-400 mb-2">PLAN</h3>
+                    <p class="text-xs text-slate-500 mb-4 font-bold">ต.ค. 68</p>
+                    <ul class="text-sm text-slate-300 space-y-2 list-disc pl-4">
+                        <li>วิเคราะห์ Pain Points</li>
+                        <li>ออกแบบ UX/UI แอป</li>
+                        <li>ออกแบบกลไกเกม (Quest)</li>
+                    </ul>
+                </div>
+                <!-- D -->
+                <div onclick="openDetailModal('pdca_d')" class="card-glass p-6 border-t-4 border-indigo-500 gs-pdca-card opacity-0 translate-y-10 group hover:bg-slate-800 transition-colors delay-100 cursor-pointer">
+                    <span class="text-6xl font-black text-indigo-500/10 absolute top-2 right-4 group-hover:text-indigo-500/20 transition-colors">D</span>
+                    <h3 class="text-2xl font-bold text-indigo-400 mb-2">DO</h3>
+                    <p class="text-xs text-slate-500 mb-4 font-bold">พ.ย. 68 - ก.ค. 69</p>
+                    <ul class="text-sm text-slate-300 space-y-2 list-disc pl-4">
+                        <li>สร้าง App ด้วย AppSheet</li>
+                        <li>ติด QR Code เครื่องดนตรี</li>
+                        <li>ใช้จริงกับ ม.4 (Active Learning)</li>
+                    </ul>
+                </div>
+                <!-- C -->
+                <div onclick="openDetailModal('pdca_c')" class="card-glass p-6 border-t-4 border-purple-500 gs-pdca-card opacity-0 translate-y-10 group hover:bg-slate-800 transition-colors delay-200 cursor-pointer">
+                    <span class="text-6xl font-black text-purple-500/10 absolute top-2 right-4 group-hover:text-purple-500/20 transition-colors">C</span>
+                    <h3 class="text-2xl font-bold text-purple-400 mb-2">CHECK</h3>
+                    <p class="text-xs text-slate-500 mb-4 font-bold">ส.ค. 69</p>
+                    <ul class="text-sm text-slate-300 space-y-2 list-disc pl-4">
+                        <li>ติดตาม Dashboard Real-time</li>
+                        <li>ประเมินทักษะ/ความรับผิดชอบ</li>
+                        <li>ประเมินความพึงพอใจ</li>
+                    </ul>
+                </div>
+                <!-- A -->
+                <div onclick="openDetailModal('pdca_a')" class="card-glass p-6 border-t-4 border-pink-500 gs-pdca-card opacity-0 translate-y-10 group hover:bg-slate-800 transition-colors delay-300 cursor-pointer">
+                    <span class="text-6xl font-black text-pink-500/10 absolute top-2 right-4 group-hover:text-pink-500/20 transition-colors">A</span>
+                    <h3 class="text-2xl font-bold text-pink-400 mb-2">ACT</h3>
+                    <p class="text-xs text-slate-500 mb-4 font-bold">ก.ย. 69</p>
+                    <ul class="text-sm text-slate-300 space-y-2 list-disc pl-4">
+                        <li>ถอดบทเรียนผ่าน PLC</li>
+                        <li>ปรับปรุงฟีเจอร์</li>
+                        <li>เผยแพร่ Best Practice</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: OUTCOME -->
+    <section class="section-screen" id="section-6">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <!-- Quantitative -->
+                <div class="gs-outcome-left opacity-0 -translate-x-10">
+                    <h2 class="text-4xl font-bold text-white font-heading mb-8">
+                        ผลลัพธ์เชิงปริมาณ<br>
+                        <span class="gradient-text">เกินกว่าเกณฑ์ 80%</span>
+                    </h2>
+                    
+                    <div class="space-y-8">
+                        <div class="relative">
+                            <div class="flex justify-between mb-2 text-sm font-bold text-slate-300">
+                                <span>การเข้าใช้งาน App/Game</span>
+                                <span class="text-sky-400">80%</span>
+                            </div>
+                            <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-sky-500 rounded-full progress-bar w-0" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="flex justify-between mb-2 text-sm font-bold text-slate-300">
+                                <span>ลดปัญหาของหาย/คืนช้า</span>
+                                <span class="text-green-400">80%</span>
+                            </div>
+                            <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 rounded-full progress-bar w-0" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="flex justify-between mb-2 text-sm font-bold text-slate-300">
+                                <span>ผลสัมฤทธิ์ทางการเรียน</span>
+                                <span class="text-purple-400">80%</span>
+                            </div>
+                            <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-purple-500 rounded-full progress-bar w-0" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Qualitative -->
+                <div class="space-y-4 gs-outcome-right opacity-0 translate-x-10">
+                    <h3 class="text-xl font-bold text-white mb-6 border-l-4 border-yellow-400 pl-3">ผลลัพธ์เชิงคุณภาพ</h3>
+                    
+                    <div class="card-glass p-5 flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 shrink-0 mt-1">
+                            <i class="ph ph-cube text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Innovation Model</h4>
+                            <p class="text-sm text-slate-400">ได้ต้นแบบระบบ NTU Music Smart System ที่มีประสิทธิภาพ ลดงานธุรการครู</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card-glass p-5 flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-1">
+                            <i class="ph ph-brain text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Behavioral Change</h4>
+                            <p class="text-sm text-slate-400">นักเรียนมีวินัย ความรับผิดชอบ และจิตสาธารณะ อย่างเป็นรูปธรรม</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card-glass p-5 flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 shrink-0 mt-1">
+                            <i class="ph ph-music-notes text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Skills & Attitude</h4>
+                            <p class="text-sm text-slate-400">ทักษะดนตรีพัฒนาขึ้น และมีทักษะดิจิทัล (Digital Literacy) ที่ดี</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+                <p>นายวรัทภพ ทุมนาหาด | โรงเรียนโนนไทยคุรุอุปถัมภ์ | ผู้อำนวยการ: นายประสาตร์ เสาไธสง</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Container -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content custom-scroll">
+            <div class="flex justify-between items-center p-6 border-b border-slate-700/50 bg-slate-900/50 sticky top-0 z-10 backdrop-blur-md">
+                <h3 class="text-2xl font-bold text-white font-heading" id="modalTitle">รายละเอียด</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-full hover:bg-slate-700">
+                    <i class="ph ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // --- Data for Modals ---
+        const detailsData = {
+            1: {
+                title: "ด้านที่ 1: การจัดการเรียนรู้ (Learning Management)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.1 การสร้าง/พัฒนาหลักสูตร</h4>
+                        <p class="text-slate-300 text-sm">ริเริ่ม <b>คิดค้นและปรับเปลี่ยน</b> หลักสูตรรายวิชาดนตรี ม.4 โดยปรับปรุงหน่วยการเรียนรู้ "ความรับผิดชอบและทักษะดนตรีวิถีใหม่" บูรณาการร่วมกับนวัตกรรม <b>"NTU Music Smart System"</b> เพื่อสร้างสมรรถนะการใช้เทคโนโลยีและจิตสาธารณะ</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.2 การออกแบบการจัดการเรียนรู้</h4>
+                        <p class="text-slate-300 text-sm"><b>คิดค้น</b> แผนการจัดการเรียนรู้ฐานสมรรถนะ โมเดล <b>"Service & Game-Based Learning"</b> เชื่อมโยงการฝึกทักษะดนตรีเข้ากับภารกิจในเกม (Music Quest) และระบบงานบริการดนตรีจริง</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.3 การจัดกิจกรรมการเรียนรู้</h4>
+                        <p class="text-slate-300 text-sm">จัดกิจกรรม <b>Active Learning</b> ผ่านแพลตฟอร์ม NTU Service App และ Music Games ครูเปลี่ยนบทบาทเป็น <b>Coach</b> ใช้ระบบติดตาม (Tracking) ให้คำแนะนำรายบุคคล</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.4 การสร้าง/พัฒนาสื่อ นวัตกรรม</h4>
+                        <p class="text-slate-300 text-sm"><b>คิดค้นและพัฒนา</b> ระบบดิจิทัล 2 ส่วน: 1) NTU Music Service App (ระบบยืม-คืนออนไลน์) 2) Music Gamification Platform (เกมฝึกทักษะสะสมแต้ม)</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.5 การวัดและประเมินผล</h4>
+                        <p class="text-slate-300 text-sm"><b>ปรับเปลี่ยน</b> สู่ <b>Data-Driven Assessment</b> วัดจิตพิสัยจาก Big Data การยืม-คืน (ความตรงต่อเวลา) และวัดทักษะจาก Level ในเกมดนตรี</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.6 การศึกษา วิเคราะห์ วิจัย</h4>
+                        <p class="text-slate-300 text-sm">วิจัยในชั้นเรียน (Classroom Action Research) เรื่องผลการใช้ระบบดิจิทัลบริหารจัดการเครื่องดนตรี ต่อพฤติกรรมความรับผิดชอบและทักษะทางดนตรี</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.7 การจัดบรรยากาศ</h4>
+                        <p class="text-slate-300 text-sm"><b>ปรับเปลี่ยน</b> ห้องดนตรีเป็น <b>Smart Music Center</b> ติด QR Code ประจำเครื่องดนตรีทุกชิ้น รองรับการใช้งานผ่านแอปพลิเคชัน</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1.8 การอบรมและพัฒนาคุณลักษณะ</h4>
+                        <p class="text-slate-300 text-sm">ปลูกฝังวินัยเชิงบวกและจิตสาธารณะ (Public Mind) ผ่านกฎกติกาการใช้งาน App ให้นักเรียนตระหนักถึงการดูแลรักษาของส่วนรวม</p>
+                    </div>
+                `
+            },
+            2: {
+                title: "ด้านที่ 2: ส่งเสริมและสนับสนุน (Promotion & Support)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">2.1 การจัดทำข้อมูลสารสนเทศ</h4>
+                        <p class="text-slate-300 text-sm"><b>คิดค้น</b> ระบบฐานข้อมูลผู้เรียนเชื่อมต่อ AppSheet แสดง <b>Dashboard</b> พัฒนาการและพฤติกรรมการยืม-คืน แบบ Real-time เพื่อแจ้งผลสะท้อนกลับทันที</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">2.2 ระบบดูแลช่วยเหลือนักเรียน</h4>
+                        <p class="text-slate-300 text-sm">ใช้ระบบแจ้งเตือน (Alert) ในแอปฯ ติดตามนักเรียนที่มีความเสี่ยง (เช่น คืนช้าบ่อยครั้ง หรือคะแนนเกมต่ำ) เพื่อให้คำปรึกษาและช่วยเหลือได้ทันท่วงที</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">2.3 ปฏิบัติงานวิชาการและงานอื่นๆ</h4>
+                        <p class="text-slate-300 text-sm">เป็นแกนนำนำระบบ <b>Inventory Management</b> มาใช้บริหารพัสดุดนตรี เป็นต้นแบบ (Prototype) ให้กับงานพัสดุและกลุ่มสาระฯ อื่นๆ ภายในโรงเรียน</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">2.4 ประสานความร่วมมือ</h4>
+                        <p class="text-slate-300 text-sm">สร้างเครือข่ายผู้ปกครองผ่านระบบ <b>Notification</b> แจ้งเตือนความสำเร็จ (Achievement) หรือพฤติกรรมที่น่าชื่นชมในการดูแลรักษาอุปกรณ์</p>
+                    </div>
+                `
+            },
+            3: {
+                title: "ด้านที่ 3: พัฒนาตนเองและวิชาชีพ (Self-Development)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-pink-400 mb-2">3.1 การพัฒนาตนเอง</h4>
+                        <p class="text-slate-300 text-sm">พัฒนาทักษะ <b>No-Code Development</b> (AppSheet) และ <b>Gamification Design</b> อย่างต่อเนื่อง เพื่ออัปเกรดระบบ NTU Music Smart System ให้มีฟีเจอร์ที่เสถียรยิ่งขึ้น</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-pink-400 mb-2">3.2 การมีส่วนร่วมใน PLC</h4>
+                        <p class="text-slate-300 text-sm">เป็นผู้นำ (Model Teacher) ในวง PLC หัวข้อ <b>"Digital Class Management"</b> ถ่ายทอดเทคนิคการสร้างแอปพลิเคชันและเกมเพื่อการศึกษาแก่เพื่อนครู</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-pink-400 mb-2">3.3 การนำความรู้มาใช้พัฒนา</h4>
+                        <p class="text-slate-300 text-sm">นำนวัตกรรม <b>"NTU Music Smart System"</b> ไปเผยแพร่เป็นแบบอย่าง (Best Practice) ในระดับเขตพื้นที่ฯ หรือระดับ อบจ. เพื่อขยายผลความสำเร็จ</p>
+                    </div>
+                `
+            },
+            // Workload Data (Added based on PA 1.1-1.4)
+            w1: {
+                title: "1.1 ชั่วโมงสอนตามตารางสอน (26 ชม./สัปดาห์)",
+                content: `
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">กลุ่มสาระการเรียนรู้ศิลปะ รายวิชา ดนตรี 1 (ศ31102) ชั้น ม.4</span>
+                        <span class="hour-badge">18 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">กลุ่มสาระการเรียนรู้ศิลปะ รายวิชา ดนตรีสากลปฏิบัติ</span>
+                        <span class="hour-badge">2 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">กิจกรรมพัฒนาผู้เรียน ม.5</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">กิจกรรมชุมนุมดนตรี</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">กิจกรรมลดเวลาเรียน เพิ่มเวลารู้</span>
+                        <span class="hour-badge">4 ชม.</span>
+                    </div>
+                `
+            },
+            w2: {
+                title: "1.2 งานส่งเสริมและสนับสนุน (4 ชม./สัปดาห์)",
+                content: `
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">การมีส่วนร่วมในชุมชนการเรียนรู้ทางวิชาชีพ (PLC)</span>
+                        <span class="hour-badge">2 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">การจัดทำแผนการจัดการเรียนรู้/สื่อการสอน AI Co-Creation</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">งานระบบดูแลช่วยเหลือนักเรียน/เยี่ยมบ้าน</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                `
+            },
+            w3: {
+                title: "1.3 งานพัฒนาคุณภาพการศึกษา (3 ชม./สัปดาห์)",
+                content: `
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">หัวหน้างาน/เจ้าหน้าที่งานโสตทัศนูปกรณ์และเทคโนโลยี</span>
+                        <span class="hour-badge">2 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">งานประชาสัมพันธ์และเผยแพร่ผลงานโรงเรียน</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                `
+            },
+            w4: {
+                title: "1.4 งานตอบสนองนโยบายและจุดเน้น (2 ชม./สัปดาห์)",
+                content: `
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">โครงการส่งเสริมความเป็นเลิศทางวิชาการ/ดนตรี (อบจ.)</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                    <div class="workload-list-item">
+                        <span class="text-slate-300 text-sm">โครงการสถานศึกษาปลอดภัย/โรงเรียนปลอดบุหรี่</span>
+                        <span class="hour-badge">1 ชม.</span>
+                    </div>
+                `
+            },
+            // Innovation Data
+            inno1: {
+                title: "1. NTU Service App (ระบบบริหารจัดการ)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">Agreement Policy Enforcement</h4>
+                        <p class="text-slate-300 text-sm">ฟีเจอร์บังคับอ่านและยอมรับ "ข้อตกลงการใช้งาน" ทุกครั้งก่อนยืม ช่วยปลูกฝังวินัยและนิติธรรม (Rule of Law) ให้ผู้เรียนตระหนักถึงกฎระเบียบส่วนรวม</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">Dual-Mode Time Tracking</h4>
+                        <p class="text-slate-300 text-sm">ระบบจับเวลาอัจฉริยะ 2 โหมด: 1) จับเวลาฝึกซ้อมสะสม (Count Up) เพื่อประเมินผลการเรียน 2) นับถอยหลังส่งคืน (Countdown) เพื่อแจ้งเตือนป้องกันการคืนช้า</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">Real-time Dashboard</h4>
+                        <p class="text-slate-300 text-sm">แสดงสถานะพัสดุและผู้ยืมแบบเรียลไทม์ ช่วยลดงานธุรการและป้องกันพัสดุสูญหาย</p>
+                    </div>
+                `
+            },
+            inno2: {
+                title: "2. Music Gamification (เกมฝึกทักษะ)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">Music Quest</h4>
+                        <p class="text-slate-300 text-sm">เปลี่ยนแบบฝึกหัดดนตรีที่น่าเบื่อ เป็น "ภารกิจ" ที่ท้าทายตามระดับความยาก (Level) เพื่อจูงใจให้ผู้เรียนอยากฝึกซ้อมต่อเนื่อง</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">Digital Badges & XP</h4>
+                        <p class="text-slate-300 text-sm">ระบบให้รางวัล "เหรียญตราความสำเร็จ" และแต้มประสบการณ์ (XP) เมื่อนักเรียนมีวินัยดี (คืนของตรงเวลา) หรือทำภารกิจสำเร็จ สร้าง Positive Reinforcement</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">Leaderboard</h4>
+                        <p class="text-slate-300 text-sm">กระดานผู้นำแสดงคะแนนสะสม เพื่อกระตุ้นการแข่งขันเชิงสร้างสรรค์ในชั้นเรียนและวงดนตรี</p>
+                    </div>
+                `
+            },
+            // PDCA Data
+            pdca_p: {
+                title: "PLAN: การวางแผน (ต.ค. 68)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">1. ศึกษาสภาพปัญหา</h4>
+                        <p class="text-slate-300 text-sm">วิเคราะห์ Pain Points เรื่องความล่าช้าของระบบยืม-คืนเดิม และปัญหาการขาดแรงจูงใจของผู้เรียน</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">2. ออกแบบนวัตกรรม</h4>
+                        <p class="text-slate-300 text-sm">ออกแบบ UX/UI ของแอป NTU Service และโครงสร้างเกม Gamification รวมถึงกำหนดกลไก Agreement Policy</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-sky-400 mb-2">3. วางแผนการสอน</h4>
+                        <p class="text-slate-300 text-sm">เขียนแผนการจัดการเรียนรู้ Active Learning ที่บูรณาการการใช้นวัตกรรมเข้าสู่ชั้นเรียน ม.4</p>
+                    </div>
+                `
+            },
+            pdca_d: {
+                title: "DO: การลงมือทำ (พ.ย. 68 - ก.ค. 69)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-indigo-400 mb-2">1. พัฒนาระบบ</h4>
+                        <p class="text-slate-300 text-sm">สร้าง Application ด้วย AppSheet เชื่อมต่อ Google Sheets และติด QR Code ที่เครื่องดนตรีทุกชิ้น</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-indigo-400 mb-2">2. จัดการเรียนรู้</h4>
+                        <p class="text-slate-300 text-sm">นำนวัตกรรมไปใช้จริงในการสอน ม.4 และวงดนตรี เน้นให้นักเรียนใช้งานเอง (Learning by Doing) และปฏิบัติตามกฎผ่าน App</p>
+                    </div>
+                `
+            },
+            pdca_c: {
+                title: "CHECK: การตรวจสอบ (ส.ค. 69)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">1. ติดตามผลผ่าน Dashboard</h4>
+                        <p class="text-slate-300 text-sm">ตรวจสอบสถิติการใช้งาน เวลาฝึกซ้อม และสถานะการคืนของแบบ Real-time เพื่อหาจุดบกพร่อง</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-purple-400 mb-2">2. ประเมินคุณภาพผู้เรียน</h4>
+                        <p class="text-slate-300 text-sm">วัดผลทักษะดนตรีจากคะแนนในเกม และประเมินคุณลักษณะ (ความรับผิดชอบ) จากประวัติการใช้งานในระบบ</p>
+                    </div>
+                `
+            },
+            pdca_a: {
+                title: "ACT: การปรับปรุงและขยายผล (ก.ย. 69)",
+                content: `
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-pink-400 mb-2">1. ถอดบทเรียน (PLC)</h4>
+                        <p class="text-slate-300 text-sm">นำผลการใช้ระบบมาสะท้อนคิดร่วมกับเพื่อนครู เพื่อปรับปรุงฟีเจอร์ให้ดียิ่งขึ้น</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4 class="text-lg font-bold text-pink-400 mb-2">2. เผยแพร่ผลงาน</h4>
+                        <p class="text-slate-300 text-sm">สรุปรายงานผลการปฏิบัติงานที่เป็นเลิศ (Best Practice) และเผยแพร่สู่สาธารณะเพื่อเป็นแบบอย่าง</p>
+                    </div>
+                `
+            }
+        };
+
+        // Unified Modal Function
+        function openDetailModal(id) {
+            const data = detailsData[id];
+            if (!data) return;
+            
+            const modal = document.getElementById('detailModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            title.innerText = data.title;
+            body.innerHTML = data.content;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+            
+            // Animate content entrance
+            gsap.fromTo(".detail-item, .workload-list-item", 
+                { opacity: 0, x: -20 },
+                { opacity: 1, x: 0, duration: 0.3, stagger: 0.1, delay: 0.1 }
+            );
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detailModal')) {
+                closeModal();
+            }
+        });
+
+        // Smooth Scroll Function
+        function scrollToSection(index) {
+            gsap.to(window, { duration: 1, scrollTo: { y: "#section-" + index }, ease: "power2.inOut" });
+        }
+
+        // Navigation Active State
+        function updateNav() {
+            const sections = document.querySelectorAll('.section-screen');
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top >= -window.innerHeight / 2 && rect.top < window.innerHeight / 2) {
+                    document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+                    document.querySelectorAll('.nav-dot')[index].classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateNav);
+
+        // ANIMATIONS
+        
+        // 1. Hero
+        gsap.to(".gs-hero", { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" });
+
+        // 2. Profile
+        ScrollTrigger.create({
+            trigger: "#section-1",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-profile-left", { opacity: 1, x: 0, duration: 1, ease: "power2.out" });
+                gsap.to(".gs-profile-right", { opacity: 1, x: 0, duration: 1, delay: 0.2, ease: "power2.out" });
+            }
+        });
+
+        // 3. Workload
+        ScrollTrigger.create({
+            trigger: "#section-2",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-fade-up", { opacity: 1, y: 0, duration: 1 });
+                gsap.to(".gs-workload-card", {
+                    opacity: 1, y: 0, duration: 0.8, stagger: 0.15,
+                    onComplete: () => {
+                        document.querySelectorAll('.counter').forEach(c => {
+                            let target = +c.getAttribute('data-target');
+                            gsap.to(c, { innerText: target, duration: 1.5, snap: { innerText: 1 }, ease: "power1.inOut" });
+                        });
+                    }
+                });
+            }
+        });
+
+        // 4. Standards
+        ScrollTrigger.create({
+            trigger: "#section-3",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-std-head", { opacity: 1, y: 0, duration: 1 });
+                gsap.to(".gs-std-card", {
+                    opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.2)"
+                });
+            }
+        });
+
+        // 5. Innovation
+        ScrollTrigger.create({
+            trigger: "#section-4",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-innov-text", { opacity: 1, x: 0, duration: 1, ease: "power2.out" });
+                gsap.to(".gs-innov-img", { opacity: 1, x: 0, duration: 1, delay: 0.2, ease: "back.out(1.2)" });
+            }
+        });
+
+        // 6. PDCA
+        ScrollTrigger.create({
+            trigger: "#section-5",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-fade-up", { opacity: 1, y: 0, duration: 1 });
+                gsap.to(".gs-pdca-card", { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "back.out(1.2)" });
+            }
+        });
+
+        // 7. Outcome
+        ScrollTrigger.create({
+            trigger: "#section-6",
+            start: "top 60%",
+            onEnter: () => {
+                gsap.to(".gs-outcome-left", { opacity: 1, x: 0, duration: 1 });
+                gsap.to(".gs-outcome-right", { opacity: 1, x: 0, duration: 1, delay: 0.3 });
+                gsap.utils.toArray('.progress-bar').forEach(bar => {
+                    let width = bar.getAttribute('data-width');
+                    gsap.to(bar, { width: width, duration: 1.5, ease: "power2.out", delay: 0.5 });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
