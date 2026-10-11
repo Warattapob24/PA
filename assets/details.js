@@ -1,109 +1,160 @@
         const detailsData = {
             // Workload Details
             w1: {
-                title: "1.1 ภาระงานสอนตามตารางสอน (20 ชม./สัปดาห์)",
+                title: "1.1 ชั่วโมงสอนตามตารางสอน (24 ชม./สัปดาห์)",
                 content: String.raw`
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">รายวิชาดนตรี 2 (รหัสวิชา ศ33101)</div>
-                            <div class="text-xs text-slate-400">ชั้นมัธยมศึกษาปีที่ 6 (จำนวน 8 ห้องเรียน รวม 16 คาบ)</div>
+                            <div class="text-white font-bold text-base">รายวิชาทัศนศิลป์ 2 (ศ22101)</div>
+                            <div class="text-xs text-slate-400">ชั้นมัธยมศึกษาปีที่ 2 · กลุ่มสาระการเรียนรู้ศิลปะ</div>
                         </div>
-                        <div class="hour-badge">16 ชม./สัปดาห์</div>
+                        <div class="hour-badge">10 ชม./สัปดาห์</div>
                     </div>
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">กิจกรรมแนะแนว</div>
-                            <div class="text-xs text-slate-400">ชั้นมัธยมศึกษาปีที่ 6</div>
+                            <div class="text-white font-bold text-base">รายวิชาดนตรี 2 (ศ33101)</div>
+                            <div class="text-xs text-slate-400">ชั้นมัธยมศึกษาปีที่ 6 · กลุ่มสาระการเรียนรู้ศิลปะ</div>
+                        </div>
+                        <div class="hour-badge">8 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">รายวิชากิจกรรมฯ</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.1/8, ม.3/2 · กลุ่มสาระการเรียนรู้ศิลปะ</div>
+                        </div>
+                        <div class="hour-badge">2 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">รายวิชาเพิ่มเติม หน้าที่พลเมือง (ส20225)</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.1/4</div>
                         </div>
                         <div class="hour-badge">1 ชม./สัปดาห์</div>
                     </div>
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">กิจกรรมพัฒนาผู้เรียน (ลูกเสือ-เนตรนารี / ยุวกาชาด)</div>
-                            <div class="text-xs text-slate-400">ระดับชั้นมัธยมศึกษา</div>
+                            <div class="text-white font-bold text-base">กิจกรรมชุมนุมดนตรีสากล (ก20901)</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.1-6</div>
                         </div>
                         <div class="hour-badge">1 ชม./สัปดาห์</div>
                     </div>
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">กิจกรรมชุมนุมดนตรีสากล (Music Club)</div>
-                            <div class="text-xs text-slate-400">ส่งเสริมศักยภาพและความเป็นเลิศทางดนตรี</div>
+                            <div class="text-white font-bold text-base">กิจกรรมแนะแนว (ก20902)</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.2/4</div>
                         </div>
                         <div class="hour-badge">1 ชม./สัปดาห์</div>
                     </div>
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">กิจกรรมเพื่อสังคมและสาธารณประโยชน์ (จิตอาสา)</div>
-                            <div class="text-xs text-slate-400">การบริการดนตรีในชุมชนและโรงเรียน</div>
+                            <div class="text-white font-bold text-base">กิจกรรมพัฒนาศักยภาพผู้เรียน (ก20903)</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.6</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">กิจกรรมสวดมนต์/สมาธิ</div>
+                            <div class="text-xs text-slate-400">ชั้น ม.2</div>
                         </div>
                         <div class="hour-badge">1 ชม./สัปดาห์</div>
                     </div>
                     <div class="p-3 bg-sky-500/10 border border-sky-500/20 rounded-lg text-sky-300 text-xs mt-4">
-                        <b>สรุปภาระงานสอน:</b> ปฏิบัติการสอนรวมทั้งสิ้น 20 ชั่วโมง/สัปดาห์ (เป็นไปตามเกณฑ์ขั้นต่ำของ ก.ค.ศ.)
+                        <b>สรุป:</b> ภาคเรียนที่ 1 ปีการศึกษา 2569 ชั่วโมงสอนตามตารางสอนรวม 24 ชั่วโมง/สัปดาห์ (ข้อมูลตามรายงาน ว.PA ปีงบประมาณ 2569)
                     </div>
                 `
-            },
+            },
             w2: {
-                title: "1.2 งานส่งเสริมและสนับสนุนการจัดการเรียนรู้ (6 ชม./สัปดาห์)",
+                title: "1.2 งานส่งเสริมและสนับสนุนการจัดการเรียนรู้ (11 ชม./สัปดาห์)",
                 content: String.raw`
                     <div class="workload-list-item">
                         <div>
-                            <div class="text-white font-bold text-base">ชุมชนแห่งการเรียนรู้ทางวิชาชีพ (PLC)</div>
-                            <div class="text-xs text-slate-400">แลกเปลี่ยนเรียนรู้การแก้นักเรียนอ่านโน้ตสากลร่วมกับกลุ่มสาระฯ ศิลปะ</div>
-                        </div>
-                        <div class="hour-badge">2 ชม./สัปดาห์</div>
-                    </div>
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">ระบบดูแลช่วยเหลือนักเรียน & ครูที่ปรึกษา ม.6</div>
-                            <div class="text-xs text-slate-400">คัดกรอง ดูแล ให้คำปรึกษา และประสานงานผู้ปกครอง</div>
-                        </div>
-                        <div class="hour-badge">2 ชม./สัปดาห์</div>
-                    </div>
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">การจัดทำแผน พัฒนาสื่อ และตรวจวัดประเมินผล</div>
-                            <div class="text-xs text-slate-400">พัฒนาแบบฝึกทักษะ Smart Music Game และตรวจผลงาน</div>
-                        </div>
-                        <div class="hour-badge">2 ชม./สัปดาห์</div>
-                    </div>
-                `
-            },
-            w3: {
-                title: "1.3 งานพัฒนาคุณภาพการจัดการศึกษาของสถานศึกษา (6 ชม./สัปดาห์)",
-                content: String.raw`
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">หัวหน้ากลุ่มสาระการเรียนรู้ศิลปะ / งานวงดนตรีโรงเรียน</div>
-                            <div class="text-xs text-slate-400">บริหารวิชาการกลุ่มสาระฯ และฝึกซ้อมวงดนตรีสากลในพิธีการต่างๆ</div>
-                        </div>
-                        <div class="hour-badge">3 ชม./สัปดาห์</div>
-                    </div>
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">งานโสตทัศนูปกรณ์และระบบเทคโนโลยีสารสนเทศ</div>
-                            <div class="text-xs text-slate-400">ดูแลระบบเสียง ถ่ายทอดสด และสื่อเทคโนโลยีในกิจกรรมสถานศึกษา</div>
-                        </div>
-                        <div class="hour-badge">3 ชม./สัปดาห์</div>
-                    </div>
-                `
-            },
-            w4: {
-                title: "1.4 งานตอบสนองนโยบายและจุดเน้น (3 ชม./สัปดาห์)",
-                content: String.raw`
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">โครงการส่งเสริมความเป็นเลิศด้านดนตรีและศิลปวัฒนธรรม</div>
-                            <div class="text-xs text-slate-400">นโยบายยกระดับสุนทรียภาพผู้เรียน สังกัด อบจ.นครราชสีมา</div>
-                        </div>
-                        <div class="hour-badge">2 ชม./สัปดาห์</div>
-                    </div>
-                    <div class="workload-list-item">
-                        <div>
-                            <div class="text-white font-bold text-base">โครงการสถานศึกษาปลอดภัยและสุขภาวะผู้เรียน</div>
-                            <div class="text-xs text-slate-400">การสร้างพื้นที่ปลอดภัย เสริมสร้างวินัยและจิตอาสา</div>
+                            <div class="text-white font-bold text-base">การขับเคลื่อนชุมชนแห่งการเรียนรู้ทางวิชาชีพ (PLC)</div>
+                            <div class="text-xs text-slate-400">แลกเปลี่ยนเรียนรู้ร่วมกับคณะครูกลุ่มสาระการเรียนรู้ศิลปะ</div>
                         </div>
                         <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">การสร้างและพัฒนานวัตกรรม/แอปพลิเคชัน/เกมการสอนดนตรี</div>
+                            <div class="text-xs text-slate-400">พัฒนา Smart Music Game เพื่อฝึกทักษะการอ่านโน้ตสากล</div>
+                        </div>
+                        <div class="hour-badge">5 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">การเตรียมการสอน/ออกแบบแผนการจัดการเรียนรู้ฐานสมรรถนะ</div>
+                            <div class="text-xs text-slate-400">แผนการจัดการเรียนรู้แบบ Active Learning</div>
+                        </div>
+                        <div class="hour-badge">5 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-lg text-indigo-300 text-xs mt-4">
+                        <b>สรุป:</b> งานส่งเสริมและสนับสนุนการจัดการเรียนรู้รวม 11 ชั่วโมง/สัปดาห์
+                    </div>
+                `
+            },
+            w3: {
+                title: "1.3 งานพัฒนาคุณภาพการจัดการศึกษาของสถานศึกษา (3 ชม./สัปดาห์)",
+                content: String.raw`
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานสัมพันธ์ชุมชนและบริการสาธารณะ</div>
+                            <div class="text-xs text-slate-400">ตามโครงสร้างการบริหารงานสถานศึกษา</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานโสตทัศนูปกรณ์และเทคโนโลยี</div>
+                            <div class="text-xs text-slate-400">สนับสนุนสื่อและเทคโนโลยีเพื่อการจัดการเรียนรู้</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานยานพาหนะ</div>
+                            <div class="text-xs text-slate-400">ตามโครงสร้างการบริหารงานสถานศึกษา</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg text-purple-300 text-xs mt-4">
+                        <b>สรุป:</b> งานพัฒนาคุณภาพการจัดการศึกษาของสถานศึกษารวม 3 ชั่วโมง/สัปดาห์
+                    </div>
+                `
+            },
+            w4: {
+                title: "1.4 งานตอบสนองนโยบายและจุดเน้น (7 ชม./สัปดาห์)",
+                content: String.raw`
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานสวนพฤกษศาสตร์โรงเรียน</div>
+                            <div class="text-xs text-slate-400">นโยบายและจุดเน้นของสถานศึกษา</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานยกระดับผลสัมฤทธิ์ทางการเรียนระดับชาติ (O-NET)</div>
+                            <div class="text-xs text-slate-400">นโยบายและจุดเน้นของสถานศึกษา</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">กิจกรรมส่งเสริมการออมทรัพย์นักเรียน</div>
+                            <div class="text-xs text-slate-400">นโยบายและจุดเน้นของสถานศึกษา</div>
+                        </div>
+                        <div class="hour-badge">1 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="workload-list-item">
+                        <div>
+                            <div class="text-white font-bold text-base">งานวงดนตรีโรงเรียน และงานตามโครงสร้างสถานศึกษา</div>
+                            <div class="text-xs text-slate-400">ฝึกซ้อมวงดนตรีและงานตามที่ได้รับมอบหมาย</div>
+                        </div>
+                        <div class="hour-badge">4 ชม./สัปดาห์</div>
+                    </div>
+                    <div class="p-3 bg-pink-500/10 border border-pink-500/20 rounded-lg text-pink-300 text-xs mt-4">
+                        <b>สรุป:</b> งานตอบสนองนโยบายและจุดเน้นรวม 7 ชั่วโมง/สัปดาห์ รวมภาระงานทั้งหมด 45 ชั่วโมง/สัปดาห์
                     </div>
                 `
             },
