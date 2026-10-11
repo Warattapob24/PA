@@ -265,15 +265,15 @@
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-indigo-400 mb-1">2. ตรวจสอบคุณภาพโดยผู้เชี่ยวชาญ (IOC)</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">นำเครื่องมือวิจัยและนวัตกรรมให้ผู้เชี่ยวชาญ 5 ท่านประเมินความสอดคล้องเชิงเนื้อหาและระบบ (ค่า IOC ผ่านเกณฑ์ทุกข้อ >= 0.80)</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">นำเครื่องมือวิจัยและนวัตกรรมให้ผู้เชี่ยวชาญ 6 ท่านประเมินความสอดคล้องเชิงเนื้อหา (ค่า IOC รายข้ออยู่ระหว่าง 0.83 - 1.00 ผ่านเกณฑ์ทุกข้อ)</p>
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-indigo-400 mb-1">3. ทดลองใช้ Try-out (3 ขั้นตอน)</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">ทดลองใช้แบบเดี่ยว (1:1), กลุ่มย่อย (1:3), และภาคสนาม (1:30) เพื่อปรับปรุงระบบให้สมบูรณ์</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">ทดลองใช้แบบรายบุคคล (3 คน), กลุ่มเล็ก (9 คน), และภาคสนาม (30 คน) เพื่อปรับปรุงระบบให้สมบูรณ์</p>
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-indigo-400 mb-1">4. จัดการเรียนรู้จริงกับกลุ่มตัวอย่าง</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">นำไปจัดกิจกรรมการเรียนรู้กับนักเรียนชั้น ม.6/6 จำนวน 38 คน ในภาคเรียนที่ 1 ปีการศึกษา 2568-2569</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">นำไปจัดกิจกรรมการเรียนรู้กับนักเรียนชั้น ม.6/6 จำนวน 38 คน ในภาคเรียนที่ 1 ปีการศึกษา 2569</p>
                     </div>
                 `
             },
@@ -290,11 +290,11 @@
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-purple-400 mb-1">3. ทดสอบสมมติฐานทางสถิติ (t-test Dependent)</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">คะแนนหลังเรียน (\(ar{X}=25.53\)) สูงกว่าก่อนเรียน (\(ar{X}=12.87\)) อย่างมีนัยสำคัญทางสถิติที่ระดับ .01 (\(t = 42.45, df=37, p < .001\))</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">คะแนนหลังเรียน (\(\bar{X}=25.53\)) สูงกว่าก่อนเรียน (\(\bar{X}=12.87\)) อย่างมีนัยสำคัญทางสถิติที่ระดับ .01 (\(t = 42.53, df=37, p < .001\))</p>
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-purple-400 mb-1">4. ประเมินความพึงพอใจของผู้เรียน</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">ผู้เรียนมีความพึงพอใจต่อการเรียนรู้อยู่ในระดับ "มากที่สุด" (\(ar{X} = 4.64, S.D. = 0.48\) คิดเป็นร้อยละ 92.80)</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">ผู้เรียนมีความพึงพอใจต่อการเรียนรู้อยู่ในระดับ "มากที่สุด" (\(\bar{X} = 4.64, S.D. = 0.48\) คิดเป็นร้อยละ 92.80)</p>
                     </div>
                 `
             },
@@ -311,7 +311,7 @@
                     </div>
                     <div class="detail-item">
                         <h4 class="text-base font-bold text-pink-400 mb-1">3. เผยแพร่ผลงานและแบบอย่างการปฏิบัติที่เป็นเลิศ (Best Practice)</h4>
-                        <p class="text-slate-300 text-xs leading-relaxed">เผยแพร่นวัตกรรมผ่านเว็บไซต์ออนไลน์, นำเสนอผลงานทางวิชาการ และเป็นวิทยากรให้ความรู้แก่ครูดนตรีในสังกัด อบจ.นครราชสีมา</p>
+                        <p class="text-slate-300 text-xs leading-relaxed">เผยแพร่นวัตกรรมผ่านเว็บไซต์ออนไลน์, นำเสนอผลงานทางวิชาการ และเป็นวิทยากรให้ความรู้แก่ครูดนตรีในสังกัด อบจ.นครราชสีมา (ได้รับการเผยแพร่บทคัดย่อบนเว็บไซต์ครูบ้านนอกดอทคอม เมื่อ 11 ต.ค. 2569: <a class="underline text-pink-300" href="https://www.kroobannok.com/board_view.php?b_id=197297" target="_blank" rel="noopener">ดูประกาศเผยแพร่</a>)</p>
                     </div>
                 `
             }
